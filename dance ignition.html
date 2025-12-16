@@ -1,0 +1,3625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance Ignition - Competition Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff3366;
+            --primary-dark: #e62e5c;
+            --secondary: #6633ff;
+            --secondary-dark: #5a2ce6;
+            --accent: #33ffcc;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --dark: #121212;
+            --dark-light: #1e1e2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #2d1b69 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(18, 18, 18, 0.9);
+            padding: 15px 0;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-img {
+            height: 60px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+        }
+        
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+        }
+        
+        .logo-subtitle {
+            font-size: 0.9rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-top: -5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+            background: rgba(255, 51, 102, 0.1);
+        }
+        
+        .nav-active {
+            color: var(--primary);
+            background: rgba(255, 51, 102, 0.15);
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        /* Main Content */
+        main {
+            padding: 30px 0;
+        }
+        
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title i {
+            color: var(--primary);
+        }
+        
+        /* Panels */
+        .panel {
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 51, 102, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .panel-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-card {
+            background: linear-gradient(135deg, rgba(102, 51, 255, 0.2), rgba(255, 51, 102, 0.2));
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(51, 255, 204, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        .card-info h3 {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .card-info p {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+        
+        /* Forms */
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--accent);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.2);
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: #212529;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: rgba(255, 51, 102, 0.2);
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .highlighted-row {
+            background: rgba(51, 255, 204, 0.15) !important;
+            animation: highlight-pulse 2s infinite;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .search-highlight {
+            background: rgba(255, 215, 0, 0.2) !important;
+            border-left: 4px solid var(--gold);
+        }
+        
+        @keyframes highlight-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(51, 255, 204, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(51, 255, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(51, 255, 204, 0); }
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Search Results */
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .participant-name {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .score-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .score-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        /* Prize Cards */
+        .prize-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .prize-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(205, 127, 50, 0.1));
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .prize-rank {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .prize-gold {
+            color: var(--gold);
+        }
+        
+        .prize-silver {
+            color: var(--silver);
+        }
+        
+        .prize-bronze {
+            color: var(--bronze);
+        }
+        
+        .prize-other {
+            color: var(--accent);
+        }
+        
+        .prize-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--dark-light);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary);
+        }
+        
+        /* Contact Info */
+        .contact-info {
+            background: rgba(255, 51, 102, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 51, 102, 0.3);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .contact-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(51, 255, 204, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+        
+        /* MongoDB Connection Status */
+        .db-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .db-connected {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+        }
+        
+        .db-disconnected {
+            background: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.5);
+        }
+        
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .upload-preview {
+            width: 200px;
+            height: 100px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .upload-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(18, 18, 18, 0.9);
+            padding: 30px 0 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 51, 102, 0.2);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-logo {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .footer-org {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+        
+        .github-link {
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .github-link:hover {
+            color: var(--primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 10px;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .panel {
+                padding: 20px 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+        
+        /* Stage spotlight effect */
+        .stage-spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 30%, transparent 100px, rgba(0, 0, 0, 0.8) 300px);
+            z-index: -1;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        
+        .badge-gold {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        
+        .badge-silver {
+            background: rgba(192, 192, 192, 0.2);
+            color: var(--silver);
+            border: 1px solid rgba(192, 192, 192, 0.5);
+        }
+        
+        .badge-bronze {
+            background: rgba(205, 127, 50, 0.2);
+            color: var(--bronze);
+            border: 1px solid rgba(205, 127, 50, 0.5);
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stage Spotlight Effect -->
+    <div class="stage-spotlight"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo-container">
+                <img id="siteLogo" class="logo-img" src="" alt="Dance Ignition Logo">
+                <div>
+                    <div class="logo-text">DANCE IGNITION</div>
+                    <div class="logo-subtitle" id="siteSubtitle">WHERE RHYTHM MEETS PASSION</div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-active" data-tab="dashboard">Dashboard</a></li>
+                    <li><a href="#" data-tab="participant-registration">Participant Registration</a></li>
+                    <li><a href="#" data-tab="judge-scoring">Judge Scoring</a></li>
+                    <li><a href="#" data-tab="results">Results</a></li>
+                    <li><a href="#" data-tab="admin">Admin Panel</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Dashboard -->
+        <div id="dashboard" class="tab-content active">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-tachometer-alt"></i> Competition Dashboard</h2>
+                    <div class="db-status" id="dbStatus">
+                        <i class="fas fa-database"></i>
+                        <span>Checking MongoDB...</span>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>Total Participants</h3>
+                            <p id="totalParticipants">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>Completed Performances</h3>
+                            <p id="completedPerformances">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>Current Leader</h3>
+                            <p id="currentLeader">None</p>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>Judges</h3>
+                            <p id="totalJudges">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+                </div>
+                <div class="btn-group">
+                    <button id="syncToMongoBtn" class="btn btn-secondary">
+                        <i class="fas fa-cloud-upload-alt"></i> Sync to MongoDB
+                    </button>
+                    <button id="loadFromMongoBtn" class="btn btn-primary">
+                        <i class="fas fa-cloud-download-alt"></i> Load from MongoDB
+                    </button>
+                    <button id="exportDataBtn" class="btn btn-success">
+                        <i class="fas fa-file-export"></i> Export Data
+                    </button>
+                    <button id="importDataBtn" class="btn btn-warning">
+                        <i class="fas fa-file-import"></i> Import Data
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quick Search -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-search"></i> Quick Search & Highlight</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quickSearch">Search by Name or ID</label>
+                        <input type="text" id="quickSearch" class="form-control" placeholder="Enter name or participant ID">
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button id="quickSearchBtn" class="btn btn-secondary">
+                            <i class="fas fa-search"></i> Search & Highlight
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Current on Stage -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-star"></i> Currently On Stage</h2>
+                    <button id="highlightBtn" class="btn btn-warning">
+                        <i class="fas fa-highlighter"></i> Highlight on Stage
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="onStageTable">
+                        <thead>
+                            <tr>
+                                <th>Participant ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="onStageBody">
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Participant Registration -->
+        <div id="participant-registration" class="tab-content">
+            <h1 class="section-title"><i class="fas fa-user-plus"></i> Participant Registration</h1>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Register New Participant</h2>
+                </div>
+                <form id="registrationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="participantName">Full Name *</label>
+                            <input type="text" id="participantName" class="form-control" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="participantPhone">Phone Number *</label>
+                            <input type="tel" id="participantPhone" class="form-control" placeholder="Enter phone number" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="participantCategory">Category *</label>
+                            <select id="participantCategory" class="form-control" required>
+                                <option value="">Select category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="participantStyle">Dance Style (Optional)</label>
+                            <input type="text" id="participantStyle" class="form-control" placeholder="e.g., Hip-hop, Contemporary">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check-circle"></i> Register Participant
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Search by Phone -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Search Participant by Phone</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchPhone">Enter Phone Number</label>
+                        <input type="tel" id="searchPhone" class="form-control" placeholder="Enter phone number to search">
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button id="searchBtn" class="btn btn-secondary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                <div id="searchResult">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+            
+            <!-- All Participants -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">All Registered Participants</h2>
+                    <button id="refreshParticipantsBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Total Score</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allParticipants">
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Judge Scoring -->
+        <div id="judge-scoring" class="tab-content">
+            <h1 class="section-title"><i class="fas fa-gavel"></i> Judge Scoring Panel</h1>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Score Entry for Current Performance</h2>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="judgeName">Judge Name</label>
+                        <select id="judgeName" class="form-control">
+                            <option value="">Select Judge</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="scoreParticipant">Participant</label>
+                        <select id="scoreParticipant" class="form-control">
+                            <option value="">Select Participant</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="scoringCategories">
+                    <!-- Scoring categories will be dynamically added here -->
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <button id="submitScoreBtn" class="btn btn-success">
+                            <i class="fas fa-paper-plane"></i> Submit Scores
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Score History -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Recent Score Entries</h2>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Judge</th>
+                                <th>Participant</th>
+                                <th>Categories</th>
+                                <th>Total</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scoreHistory">
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results -->
+        <div id="results" class="tab-content">
+            <h1 class="section-title"><i class="fas fa-chart-line"></i> Competition Results</h1>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Final Results</h2>
+                    <button id="updateResultsBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Update Final Results
+                    </button>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" data-result-tab="overall">Overall</button>
+                    <button class="tab" data-result-tab="junior">Junior Category</button>
+                    <button class="tab" data-result-tab="senior">Senior Category</button>
+                    <button class="tab" data-result-tab="prizes">Prize Distribution</button>
+                </div>
+                
+                <div id="overall" class="tab-content active">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Total Score</th>
+                                    <th>Phone</th>
+                                    <th>Prize</th>
+                                </tr>
+                            </thead>
+                            <tbody id="overallResults">
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="junior" class="tab-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Name</th>
+                                    <th>Total Score</th>
+                                    <th>Phone</th>
+                                    <th>Prize</th>
+                                </tr>
+                            </thead>
+                            <tbody id="juniorResults">
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="senior" class="tab-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Name</th>
+                                    <th>Total Score</th>
+                                    <th>Phone</th>
+                                    <th>Prize</th>
+                                </tr>
+                            </thead>
+                            <tbody id="seniorResults">
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="prizes" class="tab-content">
+                    <div class="prize-grid" id="prizeDistribution">
+                        <!-- Prize cards will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Panel -->
+        <div id="admin" class="tab-content">
+            <h1 class="section-title"><i class="fas fa-cogs"></i> Admin Panel</h1>
+            
+            <div class="tabs">
+                <button class="tab active" data-admin-tab="competition">Competition</button>
+                <button class="tab" data-admin-tab="judges">Judges</button>
+                <button class="tab" data-admin-tab="scoring">Scoring</button>
+                <button class="tab" data-admin-tab="prizes">Prizes</button>
+                <button class="tab" data-admin-tab="branding">Branding</button>
+                <button class="tab" data-admin-tab="contact">Contact</button>
+                <button class="tab" data-admin-tab="database">Database</button>
+            </div>
+            
+            <!-- Competition Management -->
+            <div id="competition" class="tab-content active">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Competition</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="competitionName">Competition Name</label>
+                            <input type="text" id="competitionName" class="form-control" value="Dance Ignition 2023">
+                        </div>
+                        <div class="form-group">
+                            <button id="updateCompetitionName" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Name
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="competitionSubtitle">Competition Subtitle</label>
+                            <input type="text" id="competitionSubtitle" class="form-control" placeholder="Enter competition subtitle">
+                        </div>
+                        <div class="form-group">
+                            <button id="updateSubtitle" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Subtitle
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCategory">Add New Category</label>
+                            <input type="text" id="newCategory" class="form-control" placeholder="Enter new category name">
+                        </div>
+                        <div class="form-group">
+                            <button id="addCategoryBtn" class="btn btn-secondary">
+                                <i class="fas fa-plus-circle"></i> Add Category
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Current Categories</label>
+                            <div id="categoriesList" class="form-control" style="min-height: 100px; overflow-y: auto;">
+                                <!-- Categories will be listed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Judges Management -->
+            <div id="judges" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Judges</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="judgeNameInput">Judge Name</label>
+                            <input type="text" id="judgeNameInput" class="form-control" placeholder="Enter judge name">
+                        </div>
+                        <div class="form-group">
+                            <label for="judgeEmail">Judge Email</label>
+                            <input type="email" id="judgeEmail" class="form-control" placeholder="Enter judge email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="judgePassword">Temporary Password</label>
+                            <input type="text" id="judgePassword" class="form-control" placeholder="Enter password">
+                        </div>
+                        <div class="form-group">
+                            <label for="judgeSpecialty">Specialty</label>
+                            <input type="text" id="judgeSpecialty" class="form-control" placeholder="e.g., Hip-hop, Contemporary">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button id="addJudgeBtn" class="btn btn-success">
+                                <i class="fas fa-user-plus"></i> Add Judge
+                            </button>
+                            <button id="removeJudgeBtn" class="btn btn-danger">
+                                <i class="fas fa-user-minus"></i> Remove Selected Judge
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Judge ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Specialty</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="judgesList">
+                                <!-- Judges will be listed here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scoring Management -->
+            <div id="scoring" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Scoring Categories</h2>
+                        <button id="editMaxScoresBtn" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit Max Scores
+                        </button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newScoringCategory">Add New Scoring Category</label>
+                            <input type="text" id="newScoringCategory" class="form-control" placeholder="e.g., Rhythm, Creativity">
+                        </div>
+                        <div class="form-group">
+                            <button id="addScoringCategoryBtn" class="btn btn-secondary">
+                                <i class="fas fa-plus"></i> Add Category
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Current Scoring Categories</label>
+                            <div id="scoringCategoriesList" class="form-control" style="min-height: 100px; overflow-y: auto;">
+                                <!-- Scoring categories will be listed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Prize Management -->
+            <div id="prizes" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Prize Distribution</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prizeCategory">Select Category</label>
+                            <select id="prizeCategory" class="form-control">
+                                <option value="overall">Overall</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="prizeRank">Prize Rank</label>
+                            <select id="prizeRank" class="form-control">
+                                <option value="1">1st (Gold)</option>
+                                <option value="2">2nd (Silver)</option>
+                                <option value="3">3rd (Bronze)</option>
+                                <option value="4">4th</option>
+                                <option value="5">5th</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prizeAmount">Prize Amount/Details</label>
+                            <input type="text" id="prizeAmount" class="form-control" placeholder="e.g., $1000 or Trophy + Certificate">
+                        </div>
+                        <div class="form-group">
+                            <label for="prizeDescription">Description (Optional)</label>
+                            <input type="text" id="prizeDescription" class="form-control" placeholder="Additional prize details">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button id="addPrizeBtn" class="btn btn-success">
+                                <i class="fas fa-gift"></i> Add/Update Prize
+                            </button>
+                            <button id="clearPrizesBtn" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Clear All Prizes
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="prizeManagementList" class="form-control" style="min-height: 150px; overflow-y: auto; margin-top: 20px;">
+                        <!-- Prizes will be listed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Branding Management -->
+            <div id="branding" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Branding & Logo</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Current Logo</label>
+                            <div id="currentLogoPreview" class="upload-preview">
+                                <img id="logoPreviewImg" src="" alt="Current Logo">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="logoUpload">Upload New Logo</label>
+                            <div class="file-upload">
+                                <input type="file" id="logoUpload" accept="image/*" class="form-control">
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-upload"></i> Choose Logo File
+                                </button>
+                            </div>
+                            <div class="upload-preview" id="newLogoPreview">
+                                <i class="fas fa-image" style="font-size: 2rem; color: var(--gray);"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="logoUrl">Or Enter Logo URL</label>
+                            <input type="url" id="logoUrl" class="form-control" placeholder="https://example.com/logo.png">
+                        </div>
+                        <div class="form-group" style="align-self: flex-end;">
+                            <button id="updateLogoBtn" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Logo
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="siteTheme">Site Theme Color</label>
+                            <input type="color" id="siteTheme" class="form-control" value="#ff3366" style="height: 50px; padding: 5px;">
+                        </div>
+                        <div class="form-group" style="align-self: flex-end;">
+                            <button id="updateThemeBtn" class="btn btn-primary">
+                                <i class="fas fa-palette"></i> Update Theme
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Management -->
+            <div id="contact" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Manage Contact Information</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="orgName">Organization Name</label>
+                            <input type="text" id="orgName" class="form-control" value="Kalikapur Nabin Sangha">
+                        </div>
+                        <div class="form-group">
+                            <button id="updateOrgName" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactPhone">Contact Phone</label>
+                            <input type="tel" id="contactPhone" class="form-control" placeholder="+91 12345 67890">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Contact Email</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="contact@danceignition.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactAddress">Address</label>
+                            <textarea id="contactAddress" class="form-control" rows="3" placeholder="Enter full address"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactFacebook">Facebook URL</label>
+                            <input type="url" id="contactFacebook" class="form-control" placeholder="https://facebook.com/danceignition">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactInstagram">Instagram URL</label>
+                            <input type="url" id="contactInstagram" class="form-control" placeholder="https://instagram.com/danceignition">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button id="saveContactInfo" class="btn btn-success">
+                                <i class="fas fa-save"></i> Save Contact Information
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="contactPreview" class="contact-info" style="margin-top: 30px;">
+                        <h3 style="color: var(--accent); margin-bottom: 20px;">Preview</h3>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div>
+                                <div id="previewOrgName">Kalikapur Nabin Sangha</div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <div id="previewPhone">+91 12345 67890</div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div id="previewEmail">contact@danceignition.com</div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <div id="previewAddress">Kalikapur, West Bengal, India</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Database Management -->
+            <div id="database" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Database Management</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mongoConnectionString">MongoDB Connection String</label>
+                            <input type="text" id="mongoConnectionString" class="form-control" 
+                                   placeholder="mongodb+srv://username:password@cluster.mongodb.net/database" 
+                                   value="mongodb+srv://admin:password@cluster.mongodb.net/dance_ignition">
+                        </div>
+                        <div class="form-group">
+                            <button id="testMongoConnection" class="btn btn-secondary">
+                                <i class="fas fa-plug"></i> Test Connection
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dbCollection">Collection Name</label>
+                            <input type="text" id="dbCollection" class="form-control" value="competition_data">
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group" style="margin: 20px 0;">
+                        <button id="backupToMongo" class="btn btn-success">
+                            <i class="fas fa-database"></i> Backup to MongoDB
+                        </button>
+                        <button id="restoreFromMongo" class="btn btn-primary">
+                            <i class="fas fa-history"></i> Restore from MongoDB
+                        </button>
+                        <button id="clearLocalStorage" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Clear Local Data
+                        </button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Database Status</label>
+                            <div id="dbStatusPanel" class="form-control" style="min-height: 100px; overflow-y: auto;">
+                                <div class="db-status db-disconnected">
+                                    <i class="fas fa-database"></i>
+                                    <span>Not connected to MongoDB</span>
+                                </div>
+                                <div id="dbLogs" style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">
+                                    <!-- Database logs will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">DANCE IGNITION</div>
+                    <div class="footer-org" id="footerOrgName">Kalikapur Nabin Sangha</div>
+                    <p style="color: var(--gray);">Premier dance competition celebrating talent and passion</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 style="color: var(--accent); margin-bottom: 15px;">Quick Links</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 8px;"><a href="#" data-tab="dashboard" style="color: var(--light); text-decoration: none;">Dashboard</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" data-tab="participant-registration" style="color: var(--light); text-decoration: none;">Registration</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" data-tab="results" style="color: var(--light); text-decoration: none;">Results</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 style="color: var(--accent); margin-bottom: 15px;">Contact Us</h3>
+                    <div id="footerContact">
+                        <!-- Contact info will be dynamically added -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                © 2023 <span id="copyrightOrg">Kalikapur Nabin Sangha</span>. All rights reserved. | 
+                Dance Ignition Competition Management System v1.0
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Edit Max Scores Modal -->
+    <div id="editMaxScoresModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-edit"></i> Edit Maximum Scores</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="maxScoresForm">
+                <!-- Dynamic form for editing max scores -->
+            </div>
+            <div class="form-row" style="margin-top: 20px;">
+                <div class="form-group">
+                    <button id="saveMaxScoresBtn" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Participant Modal -->
+    <div id="editParticipantModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-user-edit"></i> Edit Participant Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="editParticipantForm">
+                <input type="hidden" id="editParticipantId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editParticipantName">Full Name *</label>
+                        <input type="text" id="editParticipantName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editParticipantPhone">Phone Number *</label>
+                        <input type="tel" id="editParticipantPhone" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editParticipantCategory">Category *</label>
+                        <select id="editParticipantCategory" class="form-control" required>
+                            <!-- Categories will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editParticipantStyle">Dance Style</label>
+                        <input type="text" id="editParticipantStyle" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editParticipantStatus">Status</label>
+                        <select id="editParticipantStatus" class="form-control">
+                            <option value="registered">Registered</option>
+                            <option value="waiting">Waiting</option>
+                            <option value="on-stage">On Stage</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" id="deleteParticipantBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete Participant
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- MongoDB Modal -->
+    <div id="mongoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-database"></i> MongoDB Operations</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="mongoModalContent">
+                <!-- MongoDB operation results will appear here -->
+            </div>
+            <div class="form-row" style="margin-top: 20px;">
+                <div class="form-group">
+                    <button class="btn btn-primary modal-close">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import/Export Modal -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-file-export"></i> Data Management</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="dataModalContent">
+                <!-- Data management content will appear here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Enhanced data structure for the application
+        let participants = JSON.parse(localStorage.getItem('danceIgnitionParticipants')) || [
+            { id: 1, name: "Alex Johnson", phone: "1234567890", category: "junior", style: "Hip-hop", registeredAt: "2023-10-15 10:30", scores: [], totalScore: 0, status: "completed" },
+            { id: 2, name: "Maria Garcia", phone: "2345678901", category: "senior", style: "Contemporary", registeredAt: "2023-10-15 11:15", scores: [], totalScore: 0, status: "waiting" },
+            { id: 3, name: "David Smith", phone: "3456789012", category: "junior", style: "Breakdance", registeredAt: "2023-10-15 12:45", scores: [], totalScore: 0, status: "on-stage" },
+            { id: 4, name: "Lisa Wang", phone: "4567890123", category: "senior", style: "Bollywood", registeredAt: "2023-10-15 13:20", scores: [], totalScore: 0, status: "registered" }
+        ];
+        
+        let judges = JSON.parse(localStorage.getItem('danceIgnitionJudges')) || [
+            { id: 1, name: "Robert Chen", email: "judge1@danceignition.com", password: "judge123", specialty: "Contemporary", active: true },
+            { id: 2, name: "Sarah Johnson", email: "judge2@danceignition.com", password: "judge456", specialty: "Hip-hop", active: true }
+        ];
+        
+        let scoringCategories = JSON.parse(localStorage.getItem('danceIgnitionScoringCategories')) || [
+            { id: 1, name: "Beat & Rhythm", maxScore: 25 },
+            { id: 2, name: "Costume & Presentation", maxScore: 20 },
+            { id: 3, name: "Creativity & Choreography", maxScore: 25 },
+            { id: 4, name: "Technique & Execution", maxScore: 30 }
+        ];
+        
+        let competitionCategories = JSON.parse(localStorage.getItem('danceIgnitionCompetitionCategories')) || ["junior", "senior"];
+        
+        let competitionName = localStorage.getItem('danceIgnitionCompetitionName') || "Dance Ignition 2023";
+        let competitionSubtitle = localStorage.getItem('danceIgnitionCompetitionSubtitle') || "WHERE RHYTHM MEETS PASSION";
+        
+        let scoreEntries = JSON.parse(localStorage.getItem('danceIgnitionScoreEntries')) || [];
+        
+        let prizes = JSON.parse(localStorage.getItem('danceIgnitionPrizes')) || [
+            { category: "overall", rank: 1, amount: "$2000 + Trophy", description: "Champion Prize" },
+            { category: "overall", rank: 2, amount: "$1000 + Trophy", description: "1st Runner-up" },
+            { category: "overall", rank: 3, amount: "$500 + Trophy", description: "2nd Runner-up" },
+            { category: "junior", rank: 1, amount: "$1000 + Trophy", description: "Junior Champion" },
+            { category: "senior", rank: 1, amount: "$1500 + Trophy", description: "Senior Champion" }
+        ];
+        
+        // Branding and contact data
+        let branding = JSON.parse(localStorage.getItem('danceIgnitionBranding')) || {
+            logo: "",
+            themeColor: "#ff3366"
+        };
+        
+        let contactInfo = JSON.parse(localStorage.getItem('danceIgnitionContactInfo')) || {
+            orgName: "Kalikapur Nabin Sangha",
+            phone: "+91 98765 43210",
+            email: "contact@danceignition.com",
+            address: "Kalikapur, West Bengal, India",
+            facebook: "https://facebook.com/danceignition",
+            instagram: "https://instagram.com/danceignition"
+        };
+        
+        // MongoDB configuration
+        let mongoConfig = JSON.parse(localStorage.getItem('danceIgnitionMongoConfig')) || {
+            connectionString: "mongodb+srv://admin:password@cluster.mongodb.net/dance_ignition",
+            collection: "competition_data",
+            connected: false
+        };
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            updateDashboard();
+            renderParticipantsTable();
+            renderJudgesList();
+            renderScoringCategories();
+            renderCompetitionCategories();
+            renderScoreCategories();
+            updateOnStageTable();
+            renderPrizesList();
+            updatePrizeDropdown();
+            calculateAllScores();
+            updateResultsTables();
+            updateBranding();
+            updateContactInfo();
+            checkMongoDBConnection();
+        });
+        
+        function initializeApp() {
+            // Set competition name and subtitle
+            document.getElementById('competitionName').value = competitionName;
+            document.getElementById('competitionSubtitle').value = competitionSubtitle;
+            document.getElementById('siteSubtitle').textContent = competitionSubtitle;
+            document.title = `${competitionName} - Management System`;
+            
+            // Set organization name
+            document.getElementById('orgName').value = contactInfo.orgName;
+            document.getElementById('copyrightOrg').textContent = contactInfo.orgName;
+            document.getElementById('footerOrgName').textContent = contactInfo.orgName;
+            
+            // Set MongoDB config
+            document.getElementById('mongoConnectionString').value = mongoConfig.connectionString;
+            document.getElementById('dbCollection').value = mongoConfig.collection;
+            
+            // Populate category dropdowns
+            populateCategoryDropdown();
+            populatePrizeCategoryDropdown();
+            
+            // Add sample scores for demonstration
+            addSampleScores();
+            
+            // Update logo preview
+            updateLogoPreview();
+        }
+        
+        function setupEventListeners() {
+            // Tab navigation
+            document.querySelectorAll('nav a').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active tab in nav
+                    document.querySelectorAll('nav a').forEach(t => t.classList.remove('nav-active'));
+                    this.classList.add('nav-active');
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Results tab navigation
+            document.querySelectorAll('[data-result-tab]').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-result-tab');
+                    
+                    // Update active tab
+                    document.querySelectorAll('[data-result-tab]').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected content
+                    document.querySelectorAll('#results .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Admin panel tab navigation
+            document.querySelectorAll('[data-admin-tab]').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-admin-tab');
+                    
+                    // Update active tab
+                    document.querySelectorAll('[data-admin-tab]').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected content
+                    document.querySelectorAll('#admin .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Registration form
+            document.getElementById('registrationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                registerParticipant();
+            });
+            
+            // Search participant
+            document.getElementById('searchBtn').addEventListener('click', searchParticipant);
+            
+            // Quick search
+            document.getElementById('quickSearchBtn').addEventListener('click', quickSearchAndHighlight);
+            
+            // Highlight on stage button
+            document.getElementById('highlightBtn').addEventListener('click', highlightOnStage);
+            
+            // Submit score button
+            document.getElementById('submitScoreBtn').addEventListener('click', submitScores);
+            
+            // Update results button
+            document.getElementById('updateResultsBtn').addEventListener('click', updateFinalResults);
+            
+            // Refresh participants button
+            document.getElementById('refreshParticipantsBtn').addEventListener('click', function() {
+                renderParticipantsTable();
+                updateOnStageTable();
+                alert("Participants list refreshed!");
+            });
+            
+            // MongoDB operations
+            document.getElementById('syncToMongoBtn').addEventListener('click', syncToMongoDB);
+            document.getElementById('loadFromMongoBtn').addEventListener('click', loadFromMongoDB);
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+            document.getElementById('importDataBtn').addEventListener('click', importData);
+            
+            // Admin panel buttons
+            document.getElementById('updateCompetitionName').addEventListener('click', updateCompName);
+            document.getElementById('updateSubtitle').addEventListener('click', updateCompSubtitle);
+            document.getElementById('addCategoryBtn').addEventListener('click', addCompetitionCategory);
+            document.getElementById('addJudgeBtn').addEventListener('click', addJudge);
+            document.getElementById('removeJudgeBtn').addEventListener('click', removeJudge);
+            document.getElementById('addScoringCategoryBtn').addEventListener('click', addScoringCategory);
+            document.getElementById('editMaxScoresBtn').addEventListener('click', showEditMaxScoresModal);
+            document.getElementById('addPrizeBtn').addEventListener('click', addOrUpdatePrize);
+            document.getElementById('clearPrizesBtn').addEventListener('click', clearAllPrizes);
+            document.getElementById('updateLogoBtn').addEventListener('click', updateLogo);
+            document.getElementById('updateThemeBtn').addEventListener('click', updateTheme);
+            document.getElementById('updateOrgName').addEventListener('click', updateOrgName);
+            document.getElementById('saveContactInfo').addEventListener('click', saveContactInfo);
+            document.getElementById('testMongoConnection').addEventListener('click', testMongoConnection);
+            document.getElementById('backupToMongo').addEventListener('click', backupToMongoDB);
+            document.getElementById('restoreFromMongo').addEventListener('click', restoreFromMongoDB);
+            document.getElementById('clearLocalStorage').addEventListener('click', clearLocalData);
+            
+            // Logo upload preview
+            document.getElementById('logoUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('newLogoPreview');
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Logo Preview">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Modal close buttons
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').classList.remove('active');
+                });
+            });
+            
+            // Save max scores button
+            document.getElementById('saveMaxScoresBtn').addEventListener('click', saveMaxScores);
+            
+            // Edit participant form
+            document.getElementById('editParticipantForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveParticipantChanges();
+            });
+            
+            // Delete participant button
+            document.getElementById('deleteParticipantBtn').addEventListener('click', deleteParticipant);
+            
+            // Footer links
+            document.querySelectorAll('footer a[data-tab]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update nav
+                    document.querySelectorAll('nav a').forEach(t => t.classList.remove('nav-active'));
+                    document.querySelector(`nav a[data-tab="${tabId}"]`).classList.add('nav-active');
+                    
+                    // Show tab
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Populate judge dropdown
+            populateJudgeDropdown();
+            
+            // Populate participant dropdown for scoring
+            populateParticipantDropdown();
+            
+            // Close modal when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        function registerParticipant() {
+            const name = document.getElementById('participantName').value;
+            const phone = document.getElementById('participantPhone').value;
+            const category = document.getElementById('participantCategory').value;
+            const style = document.getElementById('participantStyle').value;
+            
+            // Check if phone already registered
+            const existingParticipant = participants.find(p => p.phone === phone);
+            if (existingParticipant) {
+                alert(`Participant with phone ${phone} is already registered.`);
+                return;
+            }
+            
+            // Create new participant
+            const newId = participants.length > 0 ? Math.max(...participants.map(p => p.id)) + 1 : 1;
+            const now = new Date();
+            const registeredAt = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            const newParticipant = {
+                id: newId,
+                name: name,
+                phone: phone,
+                category: category,
+                style: style,
+                registeredAt: registeredAt,
+                scores: [],
+                totalScore: 0,
+                status: "registered"
+            };
+            
+            participants.push(newParticipant);
+            saveToLocalStorage();
+            
+            // Reset form
+            document.getElementById('registrationForm').reset();
+            
+            // Update UI
+            updateDashboard();
+            renderParticipantsTable();
+            populateParticipantDropdown();
+            updateOnStageTable();
+            
+            // Show success message
+            alert(`Successfully registered ${name}! Participant ID: ${newId}`);
+        }
+        
+        function searchParticipant() {
+            const phone = document.getElementById('searchPhone').value;
+            const resultDiv = document.getElementById('searchResult');
+            
+            if (!phone) {
+                resultDiv.innerHTML = '<div class="result-card"><p>Please enter a phone number to search.</p></div>';
+                return;
+            }
+            
+            const participant = participants.find(p => p.phone === phone);
+            
+            if (!participant) {
+                resultDiv.innerHTML = '<div class="result-card"><p>No participant found with that phone number.</p></div>';
+                return;
+            }
+            
+            // Calculate participant's score if not already calculated
+            if (participant.totalScore === 0 && participant.scores.length > 0) {
+                calculateParticipantScore(participant);
+            }
+            
+            let scoresHtml = '';
+            if (participant.scores.length > 0) {
+                scoresHtml = `
+                    <div class="score-breakdown">
+                        ${participant.scores.map(score => `
+                            <div class="score-item">
+                                <div class="score-label">${score.category}</div>
+                                <div class="score-value">${score.score}/${score.maxScore}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div>
+                            <div class="participant-name">${participant.name}</div>
+                            <div>ID: ${participant.id} | Category: ${participant.category.toUpperCase()} | Status: ${participant.status.toUpperCase()}</div>
+                        </div>
+                        <div class="score-display">${participant.totalScore.toFixed(1)}</div>
+                    </div>
+                    <div><strong>Phone:</strong> ${participant.phone}</div>
+                    <div><strong>Dance Style:</strong> ${participant.style || 'Not specified'}</div>
+                    <div><strong>Registered:</strong> ${participant.registeredAt}</div>
+                    <div class="btn-group" style="margin-top: 15px;">
+                        <button class="btn btn-sm btn-warning" onclick="editParticipant(${participant.id})">
+                            <i class="fas fa-edit"></i> Edit Details
+                        </button>
+                    </div>
+                    ${scoresHtml}
+                </div>
+            `;
+        }
+        
+        function quickSearchAndHighlight() {
+            const searchTerm = document.getElementById('quickSearch').value.trim();
+            
+            if (!searchTerm) {
+                alert("Please enter a name or ID to search.");
+                return;
+            }
+            
+            // Clear previous highlights
+            document.querySelectorAll('.search-highlight').forEach(el => {
+                el.classList.remove('search-highlight');
+            });
+            
+            let found = false;
+            
+            // Search in all participants tables
+            const allRows = document.querySelectorAll('#allParticipants tr, #onStageBody tr, #recentRegistrations tr');
+            
+            allRows.forEach(row => {
+                const cells = row.cells;
+                if (cells.length > 1) {
+                    const id = cells[0].textContent;
+                    const name = cells[1].textContent;
+                    
+                    if (id === searchTerm || name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        row.classList.add('search-highlight');
+                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        found = true;
+                    }
+                }
+            });
+            
+            if (!found) {
+                alert(`No participant found with ID or name containing "${searchTerm}"`);
+            } else {
+                // Also highlight in the search result if on registration page
+                const currentTab = document.querySelector('.tab-content.active').id;
+                if (currentTab === 'participant-registration') {
+                    const participant = participants.find(p => 
+                        p.id.toString() === searchTerm || 
+                        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                    
+                    if (participant) {
+                        document.getElementById('searchPhone').value = participant.phone;
+                        searchParticipant();
+                    }
+                }
+            }
+        }
+        
+        function highlightOnStage() {
+            // Find participant currently on stage
+            const onStageParticipant = participants.find(p => p.status === "on-stage");
+            
+            if (!onStageParticipant) {
+                alert("No participant is currently on stage. Please mark a participant as 'on-stage' first.");
+                return;
+            }
+            
+            // Highlight the row in the table
+            const rows = document.querySelectorAll('#onStageBody tr');
+            rows.forEach(row => {
+                row.classList.remove('highlighted-row');
+                if (row.cells[0].textContent == onStageParticipant.id) {
+                    row.classList.add('highlighted-row');
+                    
+                    // Scroll to the highlighted row
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+            
+            // Also show a visual effect
+            document.querySelector('.stage-spotlight').style.background = 
+                `radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.2) 100px, rgba(0, 0, 0, 0.8) 300px)`;
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                document.querySelector('.stage-spotlight').style.background = 
+                    `radial-gradient(circle at 50% 30%, transparent 100px, rgba(0, 0, 0, 0.8) 300px)`;
+            }, 3000);
+            
+            alert(`Highlighting ${onStageParticipant.name} who is currently on stage!`);
+        }
+        
+        function submitScores() {
+            const judgeId = document.getElementById('judgeName').value;
+            const participantId = document.getElementById('scoreParticipant').value;
+            
+            if (!judgeId || !participantId) {
+                alert("Please select both a judge and a participant.");
+                return;
+            }
+            
+            // Collect scores for each category
+            const scoreInputs = document.querySelectorAll('.score-input');
+            const scores = [];
+            let totalScore = 0;
+            let valid = true;
+            
+            scoreInputs.forEach(input => {
+                const categoryId = input.getAttribute('data-category-id');
+                const category = scoringCategories.find(c => c.id == categoryId);
+                const scoreValue = parseFloat(input.value) || 0;
+                
+                if (scoreValue < 0 || scoreValue > category.maxScore) {
+                    alert(`Score for ${category.name} must be between 0 and ${category.maxScore}`);
+                    valid = false;
+                    return;
+                }
+                
+                scores.push({
+                    categoryId: categoryId,
+                    category: category.name,
+                    score: scoreValue,
+                    maxScore: category.maxScore
+                });
+                
+                totalScore += scoreValue;
+            });
+            
+            if (!valid) return;
+            
+            // Find participant
+            const participant = participants.find(p => p.id == participantId);
+            
+            // Add scores to participant
+            participant.scores.push({
+                judgeId: judgeId,
+                scores: scores,
+                total: totalScore,
+                timestamp: new Date().toLocaleString()
+            });
+            
+            // Update participant total score
+            calculateParticipantScore(participant);
+            
+            // Add to score entries history
+            const judge = judges.find(j => j.id == judgeId);
+            scoreEntries.unshift({
+                judge: judge.email,
+                participant: participant.name,
+                participantId: participant.id,
+                scores: scores,
+                total: totalScore,
+                timestamp: new Date().toLocaleString()
+            });
+            
+            // Limit history to last 10 entries
+            if (scoreEntries.length > 10) {
+                scoreEntries = scoreEntries.slice(0, 10);
+            }
+            
+            // Save and update UI
+            saveToLocalStorage();
+            updateDashboard();
+            renderParticipantsTable();
+            renderScoreHistory();
+            updateResultsTables();
+            
+            // Clear score inputs
+            scoreInputs.forEach(input => input.value = '');
+            
+            alert(`Scores submitted successfully! Total: ${totalScore.toFixed(1)}`);
+        }
+        
+        function updateFinalResults() {
+            calculateAllScores();
+            updateResultsTables();
+            renderPrizeDistribution();
+            alert("Final results have been updated!");
+        }
+        
+        function updateCompName() {
+            const newName = document.getElementById('competitionName').value;
+            competitionName = newName;
+            localStorage.setItem('danceIgnitionCompetitionName', competitionName);
+            document.title = `${competitionName} - Management System`;
+            alert(`Competition name updated to: ${competitionName}`);
+        }
+        
+        function updateCompSubtitle() {
+            const newSubtitle = document.getElementById('competitionSubtitle').value;
+            competitionSubtitle = newSubtitle;
+            localStorage.setItem('danceIgnitionCompetitionSubtitle', competitionSubtitle);
+            document.getElementById('siteSubtitle').textContent = competitionSubtitle;
+            alert(`Competition subtitle updated to: ${competitionSubtitle}`);
+        }
+        
+        function addCompetitionCategory() {
+            const newCategory = document.getElementById('newCategory').value.trim().toLowerCase();
+            
+            if (!newCategory) {
+                alert("Please enter a category name.");
+                return;
+            }
+            
+            if (competitionCategories.includes(newCategory)) {
+                alert("Category already exists.");
+                return;
+            }
+            
+            competitionCategories.push(newCategory);
+            saveToLocalStorage();
+            renderCompetitionCategories();
+            populateCategoryDropdown();
+            populatePrizeCategoryDropdown();
+            
+            document.getElementById('newCategory').value = '';
+            alert(`Category "${newCategory}" added successfully.`);
+        }
+        
+        function addJudge() {
+            const name = document.getElementById('judgeNameInput').value.trim();
+            const email = document.getElementById('judgeEmail').value.trim();
+            const password = document.getElementById('judgePassword').value.trim();
+            const specialty = document.getElementById('judgeSpecialty').value.trim();
+            
+            if (!name || !email) {
+                alert("Please enter both name and email.");
+                return;
+            }
+            
+            const newId = judges.length > 0 ? Math.max(...judges.map(j => j.id)) + 1 : 1;
+            judges.push({
+                id: newId,
+                name: name,
+                email: email,
+                password: password || "judge123",
+                specialty: specialty,
+                active: true
+            });
+            
+            saveToLocalStorage();
+            renderJudgesList();
+            populateJudgeDropdown();
+            
+            document.getElementById('judgeNameInput').value = '';
+            document.getElementById('judgeEmail').value = '';
+            document.getElementById('judgePassword').value = '';
+            document.getElementById('judgeSpecialty').value = '';
+            
+            alert(`Judge ${name} added successfully. ID: ${newId}`);
+        }
+        
+        function removeJudge() {
+            const checkboxes = document.querySelectorAll('#judgesList input[type="checkbox"]:checked');
+            
+            if (checkboxes.length === 0) {
+                alert("Please select at least one judge to remove.");
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to remove ${checkboxes.length} judge(s)?`)) {
+                return;
+            }
+            
+            checkboxes.forEach(checkbox => {
+                const judgeId = parseInt(checkbox.value);
+                judges = judges.filter(j => j.id !== judgeId);
+            });
+            
+            saveToLocalStorage();
+            renderJudgesList();
+            populateJudgeDropdown();
+            
+            alert(`${checkboxes.length} judge(s) removed successfully.`);
+        }
+        
+        function addScoringCategory() {
+            const newCategory = document.getElementById('newScoringCategory').value.trim();
+            
+            if (!newCategory) {
+                alert("Please enter a category name.");
+                return;
+            }
+            
+            const newId = scoringCategories.length > 0 ? Math.max(...scoringCategories.map(c => c.id)) + 1 : 1;
+            scoringCategories.push({
+                id: newId,
+                name: newCategory,
+                maxScore: 25  // Default max score
+            });
+            
+            saveToLocalStorage();
+            renderScoringCategories();
+            renderScoreCategories();
+            
+            document.getElementById('newScoringCategory').value = '';
+            alert(`Scoring category "${newCategory}" added successfully.`);
+        }
+        
+        function showEditMaxScoresModal() {
+            const modal = document.getElementById('editMaxScoresModal');
+            const form = document.getElementById('maxScoresForm');
+            
+            let formHTML = '';
+            scoringCategories.forEach(category => {
+                formHTML += `
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="maxScore-${category.id}">${category.name}</label>
+                            <input type="number" id="maxScore-${category.id}" 
+                                   class="form-control" 
+                                   value="${category.maxScore}" 
+                                   min="1" max="100" step="1">
+                        </div>
+                    </div>
+                `;
+            });
+            
+            form.innerHTML = formHTML;
+            modal.classList.add('active');
+        }
+        
+        function saveMaxScores() {
+            scoringCategories.forEach(category => {
+                const input = document.getElementById(`maxScore-${category.id}`);
+                if (input) {
+                    const newMaxScore = parseInt(input.value);
+                    if (newMaxScore > 0 && newMaxScore <= 100) {
+                        category.maxScore = newMaxScore;
+                    }
+                }
+            });
+            
+            saveToLocalStorage();
+            renderScoringCategories();
+            renderScoreCategories();
+            
+            document.getElementById('editMaxScoresModal').classList.remove('active');
+            alert("Maximum scores updated successfully!");
+        }
+        
+        function editParticipant(participantId) {
+            const participant = participants.find(p => p.id === participantId);
+            if (!participant) return;
+            
+            // Populate the edit form
+            document.getElementById('editParticipantId').value = participant.id;
+            document.getElementById('editParticipantName').value = participant.name;
+            document.getElementById('editParticipantPhone').value = participant.phone;
+            document.getElementById('editParticipantStyle').value = participant.style || '';
+            document.getElementById('editParticipantStatus').value = participant.status;
+            
+            // Populate category dropdown
+            const categorySelect = document.getElementById('editParticipantCategory');
+            categorySelect.innerHTML = '<option value="">Select category</option>';
+            competitionCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                if (category === participant.category) option.selected = true;
+                categorySelect.appendChild(option);
+            });
+            
+            // Show the modal
+            document.getElementById('editParticipantModal').classList.add('active');
+        }
+        
+        function saveParticipantChanges() {
+            const participantId = parseInt(document.getElementById('editParticipantId').value);
+            const participant = participants.find(p => p.id === participantId);
+            
+            if (!participant) return;
+            
+            // Check if phone number is being changed and if it already exists
+            const newPhone = document.getElementById('editParticipantPhone').value;
+            if (newPhone !== participant.phone) {
+                const phoneExists = participants.find(p => p.phone === newPhone && p.id !== participantId);
+                if (phoneExists) {
+                    alert(`Phone number ${newPhone} is already registered to another participant.`);
+                    return;
+                }
+            }
+            
+            // Update participant details
+            participant.name = document.getElementById('editParticipantName').value;
+            participant.phone = newPhone;
+            participant.category = document.getElementById('editParticipantCategory').value;
+            participant.style = document.getElementById('editParticipantStyle').value;
+            participant.status = document.getElementById('editParticipantStatus').value;
+            
+            saveToLocalStorage();
+            
+            // Update UI
+            updateDashboard();
+            renderParticipantsTable();
+            updateOnStageTable();
+            populateParticipantDropdown();
+            
+            // Close modal
+            document.getElementById('editParticipantModal').classList.remove('active');
+            
+            alert("Participant details updated successfully!");
+        }
+        
+        function deleteParticipant() {
+            const participantId = parseInt(document.getElementById('editParticipantId').value);
+            
+            if (!confirm("Are you sure you want to delete this participant? This action cannot be undone.")) {
+                return;
+            }
+            
+            participants = participants.filter(p => p.id !== participantId);
+            saveToLocalStorage();
+            
+            // Update UI
+            updateDashboard();
+            renderParticipantsTable();
+            updateOnStageTable();
+            populateParticipantDropdown();
+            
+            // Close modal
+            document.getElementById('editParticipantModal').classList.remove('active');
+            
+            alert("Participant deleted successfully!");
+        }
+        
+        function addOrUpdatePrize() {
+            const category = document.getElementById('prizeCategory').value;
+            const rank = parseInt(document.getElementById('prizeRank').value);
+            const amount = document.getElementById('prizeAmount').value.trim();
+            const description = document.getElementById('prizeDescription').value.trim();
+            
+            if (!amount) {
+                alert("Please enter prize amount/details.");
+                return;
+            }
+            
+            // Check if prize already exists for this category and rank
+            const existingIndex = prizes.findIndex(p => p.category === category && p.rank === rank);
+            
+            if (existingIndex >= 0) {
+                // Update existing prize
+                prizes[existingIndex] = {
+                    category: category,
+                    rank: rank,
+                    amount: amount,
+                    description: description
+                };
+            } else {
+                // Add new prize
+                prizes.push({
+                    category: category,
+                    rank: rank,
+                    amount: amount,
+                    description: description
+                });
+            }
+            
+            saveToLocalStorage();
+            renderPrizesList();
+            updateResultsTables();
+            renderPrizeDistribution();
+            
+            // Clear form
+            document.getElementById('prizeAmount').value = '';
+            document.getElementById('prizeDescription').value = '';
+            
+            alert("Prize added/updated successfully!");
+        }
+        
+        function clearAllPrizes() {
+            if (!confirm("Are you sure you want to clear all prizes? This action cannot be undone.")) {
+                return;
+            }
+            
+            prizes = [];
+            saveToLocalStorage();
+            renderPrizesList();
+            updateResultsTables();
+            renderPrizeDistribution();
+            
+            alert("All prizes cleared successfully!");
+        }
+        
+        function updateLogo() {
+            const fileInput = document.getElementById('logoUpload');
+            const logoUrl = document.getElementById('logoUrl').value;
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    branding.logo = e.target.result;
+                    saveToLocalStorage();
+                    updateLogoPreview();
+                    alert("Logo uploaded successfully!");
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (logoUrl) {
+                branding.logo = logoUrl;
+                saveToLocalStorage();
+                updateLogoPreview();
+                alert("Logo URL saved successfully!");
+            } else {
+                alert("Please select a logo file or enter a logo URL.");
+            }
+        }
+        
+        function updateLogoPreview() {
+            const logoImg = document.getElementById('siteLogo');
+            const logoPreviewImg = document.getElementById('logoPreviewImg');
+            
+            if (branding.logo) {
+                logoImg.src = branding.logo;
+                logoPreviewImg.src = branding.logo;
+                logoImg.style.display = 'block';
+            } else {
+                logoImg.style.display = 'none';
+                logoPreviewImg.src = '';
+            }
+        }
+        
+        function updateTheme() {
+            const themeColor = document.getElementById('siteTheme').value;
+            branding.themeColor = themeColor;
+            saveToLocalStorage();
+            
+            // Update CSS variables
+            document.documentElement.style.setProperty('--primary', themeColor);
+            document.documentElement.style.setProperty('--primary-dark', darkenColor(themeColor, 20));
+            
+            alert("Theme color updated successfully!");
+        }
+        
+        function darkenColor(color, percent) {
+            // Simple function to darken a hex color
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+        
+        function updateOrgName() {
+            const orgName = document.getElementById('orgName').value;
+            contactInfo.orgName = orgName;
+            saveToLocalStorage();
+            updateContactInfo();
+            alert("Organization name updated successfully!");
+        }
+        
+        function saveContactInfo() {
+            contactInfo.phone = document.getElementById('contactPhone').value;
+            contactInfo.email = document.getElementById('contactEmail').value;
+            contactInfo.address = document.getElementById('contactAddress').value;
+            contactInfo.facebook = document.getElementById('contactFacebook').value;
+            contactInfo.instagram = document.getElementById('contactInstagram').value;
+            
+            saveToLocalStorage();
+            updateContactInfo();
+            alert("Contact information saved successfully!");
+        }
+        
+        function updateContactInfo() {
+            // Update preview in admin panel
+            document.getElementById('previewOrgName').textContent = contactInfo.orgName;
+            document.getElementById('previewPhone').textContent = contactInfo.phone;
+            document.getElementById('previewEmail').textContent = contactInfo.email;
+            document.getElementById('previewAddress').textContent = contactInfo.address;
+            
+            // Update footer
+            document.getElementById('footerOrgName').textContent = contactInfo.orgName;
+            document.getElementById('copyrightOrg').textContent = contactInfo.orgName;
+            
+            // Update footer contact section
+            const footerContact = document.getElementById('footerContact');
+            footerContact.innerHTML = `
+                <div style="margin-bottom: 10px;">
+                    <i class="fas fa-phone" style="color: var(--accent); margin-right: 10px;"></i>
+                    <span>${contactInfo.phone}</span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <i class="fas fa-envelope" style="color: var(--accent); margin-right: 10px;"></i>
+                    <span>${contactInfo.email}</span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <i class="fas fa-map-marker-alt" style="color: var(--accent); margin-right: 10px;"></i>
+                    <span>${contactInfo.address}</span>
+                </div>
+            `;
+        }
+        
+        function updateBranding() {
+            updateLogoPreview();
+            document.getElementById('siteTheme').value = branding.themeColor;
+        }
+        
+        // MongoDB Functions
+        function checkMongoDBConnection() {
+            const dbStatus = document.getElementById('dbStatus');
+            if (mongoConfig.connected) {
+                dbStatus.className = 'db-status db-connected';
+                dbStatus.innerHTML = '<i class="fas fa-database"></i><span>Connected to MongoDB</span>';
+            } else {
+                dbStatus.className = 'db-status db-disconnected';
+                dbStatus.innerHTML = '<i class="fas fa-database"></i><span>Not connected to MongoDB</span>';
+            }
+        }
+        
+        function testMongoConnection() {
+            const connectionString = document.getElementById('mongoConnectionString').value;
+            const collection = document.getElementById('dbCollection').value;
+            
+            // Save config
+            mongoConfig.connectionString = connectionString;
+            mongoConfig.collection = collection;
+            saveToLocalStorage();
+            
+            // In a real application, you would make an API call to test the connection
+            // For this demo, we'll simulate a connection test
+            const dbLogs = document.getElementById('dbLogs');
+            dbLogs.innerHTML = `<div style="color: var(--accent);">Testing MongoDB connection...</div>`;
+            
+            setTimeout(() => {
+                // Simulate successful connection
+                mongoConfig.connected = true;
+                localStorage.setItem('danceIgnitionMongoConfig', JSON.stringify(mongoConfig));
+                
+                dbLogs.innerHTML += `<div style="color: var(--success); margin-top: 5px;">
+                    ✓ Connected successfully to MongoDB Atlas
+                </div>`;
+                dbLogs.innerHTML += `<div style="color: var(--gray); margin-top: 5px;">
+                    Collection: ${collection}
+                </div>`;
+                
+                checkMongoDBConnection();
+            }, 1500);
+        }
+        
+        function syncToMongoDB() {
+            if (!mongoConfig.connected) {
+                alert("Please test and establish MongoDB connection first.");
+                return;
+            }
+            
+            const dbLogs = document.getElementById('dbLogs');
+            dbLogs.innerHTML = `<div style="color: var(--accent);">Synchronizing data to MongoDB...</div>`;
+            
+            // Prepare data for MongoDB
+            const syncData = {
+                participants: participants,
+                judges: judges,
+                scoringCategories: scoringCategories,
+                competitionCategories: competitionCategories,
+                competitionName: competitionName,
+                competitionSubtitle: competitionSubtitle,
+                scoreEntries: scoreEntries,
+                prizes: prizes,
+                branding: branding,
+                contactInfo: contactInfo,
+                syncTimestamp: new Date().toISOString()
+            };
+            
+            // In a real application, you would make an API call to save to MongoDB
+            // For this demo, we'll simulate the sync
+            setTimeout(() => {
+                // Save to localStorage as a backup
+                localStorage.setItem('danceIgnitionMongoBackup', JSON.stringify(syncData));
+                
+                dbLogs.innerHTML += `<div style="color: var(--success); margin-top: 5px;">
+                    ✓ Data synchronized to MongoDB successfully
+                </div>`;
+                dbLogs.innerHTML += `<div style="color: var(--gray); margin-top: 5px;">
+                    Last sync: ${new Date().toLocaleString()}
+                </div>`;
+                
+                // Show success modal
+                showMongoModal("Data Synchronization", `
+                    <div style="text-align: center; padding: 20px;">
+                        <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success); margin-bottom: 20px;"></i>
+                        <h3 style="color: var(--accent); margin-bottom: 10px;">Sync Successful!</h3>
+                        <p>All competition data has been synchronized to MongoDB.</p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                            <strong>Data Summary:</strong><br>
+                            • Participants: ${participants.length}<br>
+                            • Judges: ${judges.length}<br>
+                            • Scores: ${scoreEntries.length}<br>
+                            • Prizes: ${prizes.length}
+                        </div>
+                    </div>
+                `);
+            }, 2000);
+        }
+        
+        function loadFromMongoDB() {
+            if (!mongoConfig.connected) {
+                alert("Please test and establish MongoDB connection first.");
+                return;
+            }
+            
+            const dbLogs = document.getElementById('dbLogs');
+            dbLogs.innerHTML = `<div style="color: var(--accent);">Loading data from MongoDB...</div>`;
+            
+            // In a real application, you would make an API call to load from MongoDB
+            // For this demo, we'll load from localStorage backup
+            setTimeout(() => {
+                const backupData = JSON.parse(localStorage.getItem('danceIgnitionMongoBackup'));
+                
+                if (backupData) {
+                    // Restore data
+                    participants = backupData.participants || participants;
+                    judges = backupData.judges || judges;
+                    scoringCategories = backupData.scoringCategories || scoringCategories;
+                    competitionCategories = backupData.competitionCategories || competitionCategories;
+                    competitionName = backupData.competitionName || competitionName;
+                    competitionSubtitle = backupData.competitionSubtitle || competitionSubtitle;
+                    scoreEntries = backupData.scoreEntries || scoreEntries;
+                    prizes = backupData.prizes || prizes;
+                    branding = backupData.branding || branding;
+                    contactInfo = backupData.contactInfo || contactInfo;
+                    
+                    // Save to localStorage
+                    saveToLocalStorage();
+                    
+                    // Update UI
+                    initializeApp();
+                    updateDashboard();
+                    renderParticipantsTable();
+                    updateResultsTables();
+                    updateBranding();
+                    updateContactInfo();
+                    
+                    dbLogs.innerHTML += `<div style="color: var(--success); margin-top: 5px;">
+                        ✓ Data loaded from MongoDB successfully
+                    </div>`;
+                    dbLogs.innerHTML += `<div style="color: var(--gray); margin-top: 5px;">
+                        Last sync: ${backupData.syncTimestamp ? new Date(backupData.syncTimestamp).toLocaleString() : 'Unknown'}
+                    </div>`;
+                    
+                    // Show success modal
+                    showMongoModal("Data Restoration", `
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-database" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">Data Restored!</h3>
+                            <p>All competition data has been loaded from MongoDB.</p>
+                            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                                <strong>Restored Data:</strong><br>
+                                • Participants: ${participants.length}<br>
+                                • Judges: ${judges.length}<br>
+                                • Scores: ${scoreEntries.length}<br>
+                                • Prizes: ${prizes.length}
+                            </div>
+                        </div>
+                    `);
+                } else {
+                    dbLogs.innerHTML += `<div style="color: var(--danger); margin-top: 5px;">
+                        ✗ No backup data found in MongoDB
+                    </div>`;
+                    alert("No backup data found in MongoDB. Please sync data first.");
+                }
+            }, 2000);
+        }
+        
+        function backupToMongoDB() {
+            syncToMongoDB();
+        }
+        
+        function restoreFromMongoDB() {
+            loadFromMongoDB();
+        }
+        
+        function clearLocalData() {
+            if (!confirm("Are you sure you want to clear all local data? This will delete all participants, judges, scores, and settings. Make sure you have a MongoDB backup first!")) {
+                return;
+            }
+            
+            // Clear all localStorage data
+            localStorage.clear();
+            
+            // Reset all variables to defaults
+            participants = [];
+            judges = [];
+            scoringCategories = [];
+            competitionCategories = ["junior", "senior"];
+            competitionName = "Dance Ignition 2023";
+            competitionSubtitle = "WHERE RHYTHM MEETS PASSION";
+            scoreEntries = [];
+            prizes = [];
+            branding = { logo: "", themeColor: "#ff3366" };
+            contactInfo = {
+                orgName: "Kalikapur Nabin Sangha",
+                phone: "+91 98765 43210",
+                email: "contact@danceignition.com",
+                address: "Kalikapur, West Bengal, India",
+                facebook: "https://facebook.com/danceignition",
+                instagram: "https://instagram.com/danceignition"
+            };
+            mongoConfig = {
+                connectionString: "mongodb+srv://admin:password@cluster.mongodb.net/dance_ignition",
+                collection: "competition_data",
+                connected: false
+            };
+            
+            // Save defaults
+            saveToLocalStorage();
+            
+            // Update UI
+            initializeApp();
+            updateDashboard();
+            renderParticipantsTable();
+            updateResultsTables();
+            updateBranding();
+            updateContactInfo();
+            
+            alert("All local data cleared. System reset to defaults.");
+        }
+        
+        function exportData() {
+            const data = {
+                participants: participants,
+                judges: judges,
+                scoringCategories: scoringCategories,
+                competitionCategories: competitionCategories,
+                competitionName: competitionName,
+                competitionSubtitle: competitionSubtitle,
+                scoreEntries: scoreEntries,
+                prizes: prizes,
+                branding: branding,
+                contactInfo: contactInfo,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `dance-ignition-backup-${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            // Show modal
+            showDataModal("Data Export", `
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fas fa-file-export" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--accent); margin-bottom: 10px;">Export Successful!</h3>
+                    <p>All competition data has been exported to a JSON file.</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 20px; text-align: left;">
+                        <strong>Export Details:</strong><br>
+                        • File: ${exportFileDefaultName}<br>
+                        • Date: ${new Date().toLocaleString()}<br>
+                        • Size: ${(dataStr.length / 1024).toFixed(2)} KB<br>
+                        • Participants: ${participants.length}<br>
+                        • Judges: ${judges.length}
+                    </div>
+                </div>
+            `);
+        }
+        
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        // Validate imported data
+                        if (!importedData.participants || !Array.isArray(importedData.participants)) {
+                            throw new Error("Invalid data format: participants array missing");
+                        }
+                        
+                        // Ask for confirmation
+                        if (!confirm(`Import data from ${file.name}?\nThis will replace all current data.`)) {
+                            return;
+                        }
+                        
+                        // Import data
+                        participants = importedData.participants || participants;
+                        judges = importedData.judges || judges;
+                        scoringCategories = importedData.scoringCategories || scoringCategories;
+                        competitionCategories = importedData.competitionCategories || competitionCategories;
+                        competitionName = importedData.competitionName || competitionName;
+                        competitionSubtitle = importedData.competitionSubtitle || competitionSubtitle;
+                        scoreEntries = importedData.scoreEntries || scoreEntries;
+                        prizes = importedData.prizes || prizes;
+                        branding = importedData.branding || branding;
+                        contactInfo = importedData.contactInfo || contactInfo;
+                        
+                        // Save to localStorage
+                        saveToLocalStorage();
+                        
+                        // Update UI
+                        initializeApp();
+                        updateDashboard();
+                        renderParticipantsTable();
+                        updateResultsTables();
+                        updateBranding();
+                        updateContactInfo();
+                        
+                        // Show success modal
+                        showDataModal("Data Import", `
+                            <div style="text-align: center; padding: 20px;">
+                                <i class="fas fa-file-import" style="font-size: 3rem; color: var(--success); margin-bottom: 20px;"></i>
+                                <h3 style="color: var(--accent); margin-bottom: 10px;">Import Successful!</h3>
+                                <p>Data has been imported from ${file.name}.</p>
+                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 20px; text-align: left;">
+                                    <strong>Imported Data:</strong><br>
+                                    • Participants: ${participants.length}<br>
+                                    • Judges: ${judges.length}<br>
+                                    • Scores: ${scoreEntries.length}<br>
+                                    • Export Date: ${importedData.exportDate ? new Date(importedData.exportDate).toLocaleString() : 'Unknown'}
+                                </div>
+                            </div>
+                        `);
+                        
+                    } catch (error) {
+                        alert(`Error importing data: ${error.message}`);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        function showMongoModal(title, content) {
+            const modal = document.getElementById('mongoModal');
+            document.getElementById('mongoModalContent').innerHTML = content;
+            modal.classList.add('active');
+        }
+        
+        function showDataModal(title, content) {
+            const modal = document.getElementById('dataModal');
+            document.getElementById('dataModalContent').innerHTML = content;
+            modal.classList.add('active');
+        }
+        
+        // Helper functions
+        function calculateParticipantScore(participant) {
+            if (participant.scores.length === 0) {
+                participant.totalScore = 0;
+                return;
+            }
+            
+            // For simplicity, we'll average all judge scores
+            let total = 0;
+            participant.scores.forEach(scoreEntry => {
+                total += scoreEntry.total;
+            });
+            
+            participant.totalScore = total / participant.scores.length;
+        }
+        
+        function calculateAllScores() {
+            participants.forEach(participant => {
+                calculateParticipantScore(participant);
+            });
+            
+            // Sort participants by score (descending)
+            participants.sort((a, b) => b.totalScore - a.totalScore);
+        }
+        
+        function updateDashboard() {
+            const totalParticipants = participants.length;
+            const completedPerformances = participants.filter(p => p.status === "completed").length;
+            const currentLeader = participants.length > 0 ? participants[0].name : "None";
+            const totalJudges = judges.length;
+            
+            document.getElementById('totalParticipants').textContent = totalParticipants;
+            document.getElementById('completedPerformances').textContent = completedPerformances;
+            document.getElementById('currentLeader').textContent = currentLeader;
+            document.getElementById('totalJudges').textContent = totalJudges;
+        }
+        
+        function renderParticipantsTable() {
+            const allParticipantsHtml = participants.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.phone}</td>
+                    <td>${p.category}</td>
+                    <td><span class="status-${p.status}">${p.status}</span></td>
+                    <td>${p.totalScore.toFixed(1)}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-primary" onclick="changeParticipantStatus(${p.id}, 'on-stage')">
+                                <i class="fas fa-star"></i> On Stage
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="changeParticipantStatus(${p.id}, 'completed')">
+                                <i class="fas fa-check"></i> Completed
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="changeParticipantStatus(${p.id}, 'waiting')">
+                                <i class="fas fa-clock"></i> Waiting
+                            </button>
+                            <button class="btn btn-sm btn-info" onclick="editParticipant(${p.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('allParticipants').innerHTML = allParticipantsHtml;
+            
+            // Add CSS for status
+            const style = document.createElement('style');
+            style.textContent = `
+                .status-registered { color: var(--info); }
+                .status-waiting { color: var(--warning); }
+                .status-on-stage { color: var(--accent); font-weight: bold; }
+                .status-completed { color: var(--success); }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        function updateOnStageTable() {
+            const onStageParticipants = participants.filter(p => p.status === "on-stage" || p.status === "waiting");
+            
+            const onStageHtml = onStageParticipants.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>${p.phone}</td>
+                    <td><span class="status-${p.status}">${p.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm ${p.status === 'on-stage' ? 'btn-warning' : 'btn-secondary'}" 
+                                onclick="changeParticipantStatus(${p.id}, '${p.status === 'on-stage' ? 'waiting' : 'on-stage'}')">
+                            ${p.status === 'on-stage' ? 'Move to Waiting' : 'Put On Stage'}
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('onStageBody').innerHTML = onStageHtml;
+        }
+        
+        function changeParticipantStatus(id, status) {
+            const participant = participants.find(p => p.id === id);
+            if (participant) {
+                participant.status = status;
+                saveToLocalStorage();
+                updateDashboard();
+                renderParticipantsTable();
+                updateOnStageTable();
+                
+                if (status === 'on-stage') {
+                    // Automatically highlight when put on stage
+                    setTimeout(() => highlightOnStage(), 500);
+                }
+            }
+        }
+        
+        function renderJudgesList() {
+            const judgesHtml = judges.map(j => `
+                <tr>
+                    <td><input type="checkbox" value="${j.id}"></td>
+                    <td>${j.id}</td>
+                    <td>${j.name}</td>
+                    <td>${j.email}</td>
+                    <td>${j.specialty || '-'}</td>
+                    <td>${j.active ? '<span style="color: var(--success);">Active</span>' : '<span style="color: var(--danger);">Inactive</span>'}</td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('judgesList').innerHTML = judgesHtml;
+        }
+        
+        function renderScoringCategories() {
+            const categoriesHtml = scoringCategories.map(c => `
+                <div style="padding: 5px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    ${c.name} (Max Score: ${c.maxScore})
+                    <button class="btn btn-sm btn-danger" style="float: right; padding: 2px 8px;" onclick="removeScoringCategory(${c.id})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+            
+            document.getElementById('scoringCategoriesList').innerHTML = categoriesHtml;
+        }
+        
+        function removeScoringCategory(id) {
+            if (scoringCategories.length <= 1) {
+                alert("Cannot remove the last scoring category.");
+                return;
+            }
+            
+            scoringCategories = scoringCategories.filter(c => c.id !== id);
+            saveToLocalStorage();
+            renderScoringCategories();
+            renderScoreCategories();
+        }
+        
+        function renderCompetitionCategories() {
+            const categoriesHtml = competitionCategories.map(c => `
+                <div style="padding: 5px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    ${c.toUpperCase()}
+                    <button class="btn btn-sm btn-danger" style="float: right; padding: 2px 8px;" onclick="removeCompetitionCategory('${c}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+            
+            document.getElementById('categoriesList').innerHTML = categoriesHtml;
+        }
+        
+        function removeCompetitionCategory(category) {
+            if (competitionCategories.length <= 1) {
+                alert("Cannot remove the last competition category.");
+                return;
+            }
+            
+            // Check if any participants are in this category
+            const participantsInCategory = participants.filter(p => p.category === category);
+            if (participantsInCategory.length > 0) {
+                alert(`Cannot remove category "${category}" because there are ${participantsInCategory.length} participants in this category. Please reassign them first.`);
+                return;
+            }
+            
+            competitionCategories = competitionCategories.filter(c => c !== category);
+            saveToLocalStorage();
+            renderCompetitionCategories();
+            populateCategoryDropdown();
+            populatePrizeCategoryDropdown();
+        }
+        
+        function renderScoreCategories() {
+            const scoringDiv = document.getElementById('scoringCategories');
+            let html = '<div class="form-row">';
+            
+            scoringCategories.forEach((category, index) => {
+                if (index > 0 && index % 2 === 0) {
+                    html += '</div><div class="form-row">';
+                }
+                
+                html += `
+                    <div class="form-group">
+                        <label for="score-${category.id}">${category.name} (0-${category.maxScore})</label>
+                        <input type="number" id="score-${category.id}" 
+                               class="form-control score-input" 
+                               data-category-id="${category.id}"
+                               min="0" max="${category.maxScore}" step="0.5" placeholder="Enter score">
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            scoringDiv.innerHTML = html;
+        }
+        
+        function renderScoreHistory() {
+            const historyHtml = scoreEntries.map(entry => `
+                <tr>
+                    <td>${entry.judge}</td>
+                    <td>${entry.participant} (ID: ${entry.participantId})</td>
+                    <td>
+                        ${entry.scores.map(s => `${s.category}: ${s.score}`).join(', ')}
+                    </td>
+                    <td>${entry.total.toFixed(1)}</td>
+                    <td>${entry.timestamp}</td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('scoreHistory').innerHTML = historyHtml;
+        }
+        
+        function populateJudgeDropdown() {
+            const dropdown = document.getElementById('judgeName');
+            let html = '<option value="">Select Judge</option>';
+            
+            judges.forEach(judge => {
+                if (judge.active) {
+                    html += `<option value="${judge.id}">${judge.name} (${judge.specialty || 'General'})</option>`;
+                }
+            });
+            
+            dropdown.innerHTML = html;
+        }
+        
+        function populateParticipantDropdown() {
+            const dropdown = document.getElementById('scoreParticipant');
+            let html = '<option value="">Select Participant</option>';
+            
+            participants.forEach(participant => {
+                html += `<option value="${participant.id}">${participant.name} (ID: ${participant.id})</option>`;
+            });
+            
+            dropdown.innerHTML = html;
+        }
+        
+        function populateCategoryDropdown() {
+            const dropdown = document.getElementById('participantCategory');
+            let html = '<option value="">Select category</option>';
+            
+            competitionCategories.forEach(category => {
+                const displayName = category.charAt(0).toUpperCase() + category.slice(1);
+                html += `<option value="${category}">${displayName}</option>`;
+            });
+            
+            dropdown.innerHTML = html;
+        }
+        
+        function populatePrizeCategoryDropdown() {
+            const dropdown = document.getElementById('prizeCategory');
+            let html = '<option value="overall">Overall</option>';
+            
+            competitionCategories.forEach(category => {
+                const displayName = category.charAt(0).toUpperCase() + category.slice(1);
+                html += `<option value="${category}">${displayName}</option>`;
+            });
+            
+            dropdown.innerHTML = html;
+        }
+        
+        function updateResultsTables() {
+            // Sort participants by score (descending)
+            const sortedParticipants = [...participants].sort((a, b) => b.totalScore - a.totalScore);
+            
+            // Overall results
+            const overallHtml = sortedParticipants.map((p, index) => {
+                const rank = index + 1;
+                const prize = getPrizeForParticipant(p, "overall", rank);
+                return `
+                    <tr>
+                        <td>${rank}</td>
+                        <td>${p.name}</td>
+                        <td>${p.category}</td>
+                        <td>${p.totalScore.toFixed(1)}</td>
+                        <td>${p.phone}</td>
+                        <td>${prize ? prize.amount : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('overallResults').innerHTML = overallHtml;
+            
+            // Junior category results
+            const juniorParticipants = participants.filter(p => p.category === "junior").sort((a, b) => b.totalScore - a.totalScore);
+            const juniorHtml = juniorParticipants.map((p, index) => {
+                const rank = index + 1;
+                const prize = getPrizeForParticipant(p, "junior", rank);
+                return `
+                    <tr>
+                        <td>${rank}</td>
+                        <td>${p.name}</td>
+                        <td>${p.totalScore.toFixed(1)}</td>
+                        <td>${p.phone}</td>
+                        <td>${prize ? prize.amount : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('juniorResults').innerHTML = juniorHtml;
+            
+            // Senior category results
+            const seniorParticipants = participants.filter(p => p.category === "senior").sort((a, b) => b.totalScore - a.totalScore);
+            const seniorHtml = seniorParticipants.map((p, index) => {
+                const rank = index + 1;
+                const prize = getPrizeForParticipant(p, "senior", rank);
+                return `
+                    <tr>
+                        <td>${rank}</td>
+                        <td>${p.name}</td>
+                        <td>${p.totalScore.toFixed(1)}</td>
+                        <td>${p.phone}</td>
+                        <td>${prize ? prize.amount : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('seniorResults').innerHTML = seniorHtml;
+        }
+        
+        function getPrizeForParticipant(participant, category, rank) {
+            // First check for category-specific prize
+            let prize = prizes.find(p => p.category === participant.category && p.rank === rank);
+            
+            // If not found, check for overall prize
+            if (!prize) {
+                prize = prizes.find(p => p.category === "overall" && p.rank === rank);
+            }
+            
+            return prize;
+        }
+        
+        function renderPrizesList() {
+            const prizesList = document.getElementById('prizeManagementList');
+            
+            if (prizes.length === 0) {
+                prizesList.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--gray);">No prizes defined yet.</div>';
+                return;
+            }
+            
+            // Group prizes by category
+            const prizesByCategory = {};
+            prizes.forEach(prize => {
+                if (!prizesByCategory[prize.category]) {
+                    prizesByCategory[prize.category] = [];
+                }
+                prizesByCategory[prize.category].push(prize);
+            });
+            
+            let html = '';
+            Object.keys(prizesByCategory).sort().forEach(category => {
+                const categoryPrizes = prizesByCategory[category].sort((a, b) => a.rank - b.rank);
+                const categoryName = category === "overall" ? "Overall" : category.charAt(0).toUpperCase() + category.slice(1);
+                
+                html += `<div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <strong>${categoryName}</strong>`;
+                
+                categoryPrizes.forEach(prize => {
+                    const rankText = prize.rank === 1 ? "1st (Gold)" : 
+                                   prize.rank === 2 ? "2nd (Silver)" : 
+                                   prize.rank === 3 ? "3rd (Bronze)" : 
+                                   `${prize.rank}th`;
+                    
+                    html += `<div style="padding: 5px 0 5px 15px;">
+                        ${rankText}: ${prize.amount} ${prize.description ? `- ${prize.description}` : ''}
+                        <button class="btn btn-sm btn-danger" style="float: right; padding: 2px 8px;" onclick="removePrize('${prize.category}', ${prize.rank})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            prizesList.innerHTML = html;
+        }
+        
+        function removePrize(category, rank) {
+            prizes = prizes.filter(p => !(p.category === category && p.rank === rank));
+            saveToLocalStorage();
+            renderPrizesList();
+            updateResultsTables();
+            renderPrizeDistribution();
+        }
+        
+        function renderPrizeDistribution() {
+            const prizeGrid = document.getElementById('prizeDistribution');
+            
+            if (prizes.length === 0) {
+                prizeGrid.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--gray);">No prizes defined yet. Use the Admin Panel to add prizes.</div>';
+                return;
+            }
+            
+            // Group prizes by category
+            const prizesByCategory = {};
+            prizes.forEach(prize => {
+                if (!prizesByCategory[prize.category]) {
+                    prizesByCategory[prize.category] = [];
+                }
+                prizesByCategory[prize.category].push(prize);
+            });
+            
+            let html = '';
+            Object.keys(prizesByCategory).sort().forEach(category => {
+                const categoryPrizes = prizesByCategory[category].sort((a, b) => a.rank - b.rank);
+                const categoryName = category === "overall" ? "Overall Competition" : category.charAt(0).toUpperCase() + category.slice(1) + " Category";
+                
+                html += `<div class="prize-card">
+                    <div class="prize-rank">
+                        <i class="fas fa-trophy"></i>
+                        ${categoryName}
+                    </div>`;
+                
+                categoryPrizes.forEach(prize => {
+                    let rankClass = "prize-other";
+                    let icon = "fas fa-award";
+                    
+                    if (prize.rank === 1) {
+                        rankClass = "prize-gold";
+                        icon = "fas fa-crown";
+                    } else if (prize.rank === 2) {
+                        rankClass = "prize-silver";
+                        icon = "fas fa-medal";
+                    } else if (prize.rank === 3) {
+                        rankClass = "prize-bronze";
+                        icon = "fas fa-medal";
+                    }
+                    
+                    html += `<div class="prize-details">
+                        <div class="${rankClass}" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="${icon}"></i>
+                            <span style="font-weight: bold;">${prize.rank === 1 ? "1st" : prize.rank === 2 ? "2nd" : prize.rank === 3 ? "3rd" : `${prize.rank}th`} Place</span>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <strong>Prize:</strong> ${prize.amount}
+                        </div>
+                        ${prize.description ? `<div><strong>Details:</strong> ${prize.description}</div>` : ''}
+                    </div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            prizeGrid.innerHTML = html;
+        }
+        
+        function addSampleScores() {
+            // Add some sample scores for demonstration if none exist
+            if (scoreEntries.length === 0 && participants.length > 0) {
+                participants.forEach((participant, index) => {
+                    if (participant.scores.length === 0) {
+                        const scores = [];
+                        let total = 0;
+                        
+                        scoringCategories.forEach(category => {
+                            const score = Math.floor(Math.random() * (category.maxScore * 0.8)) + (category.maxScore * 0.2);
+                            scores.push({
+                                categoryId: category.id,
+                                category: category.name,
+                                score: score,
+                                maxScore: category.maxScore
+                            });
+                            total += score;
+                        });
+                        
+                        participant.scores.push({
+                            judgeId: 1,
+                            scores: scores,
+                            total: total,
+                            timestamp: new Date().toLocaleString()
+                        });
+                        
+                        scoreEntries.push({
+                            judge: "judge1@danceignition.com",
+                            participant: participant.name,
+                            participantId: participant.id,
+                            scores: scores,
+                            total: total,
+                            timestamp: new Date().toLocaleString()
+                        });
+                        
+                        calculateParticipantScore(participant);
+                    }
+                });
+                
+                saveToLocalStorage();
+                updateResultsTables();
+            }
+        }
+        
+        function saveToLocalStorage() {
+            localStorage.setItem('danceIgnitionParticipants', JSON.stringify(participants));
+            localStorage.setItem('danceIgnitionJudges', JSON.stringify(judges));
+            localStorage.setItem('danceIgnitionScoringCategories', JSON.stringify(scoringCategories));
+            localStorage.setItem('danceIgnitionCompetitionCategories', JSON.stringify(competitionCategories));
+            localStorage.setItem('danceIgnitionScoreEntries', JSON.stringify(scoreEntries));
+            localStorage.setItem('danceIgnitionPrizes', JSON.stringify(prizes));
+            localStorage.setItem('danceIgnitionBranding', JSON.stringify(branding));
+            localStorage.setItem('danceIgnitionContactInfo', JSON.stringify(contactInfo));
+            localStorage.setItem('danceIgnitionMongoConfig', JSON.stringify(mongoConfig));
+        }
+        
+        // Make functions available globally for onclick handlers
+        window.changeParticipantStatus = changeParticipantStatus;
+        window.removeScoringCategory = removeScoringCategory;
+        window.removeCompetitionCategory = removeCompetitionCategory;
+        window.editParticipant = editParticipant;
+        window.removePrize = removePrize;
+    </script>
+</body>
+</html>
